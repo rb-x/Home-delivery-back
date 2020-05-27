@@ -4,12 +4,13 @@ import cors from "cors";
 import helmet from "helmet";
 import auth from "./routes/auth";
 import annonces from "./routes/annonces";
- 
+import bodylogger from "./middlewares/bodylogger"
 import db from "./config/db";
 const app = express();
 const port = process.env.PORT || 8080;
 
 app.use(helmet());
+app.use(bodylogger)
 app.use(cors());
 app.use(express.json());
 app.use(
@@ -21,8 +22,8 @@ app.use(
 app.use("/annonce", annonces);
 app.use("/auth", auth);
 
-app.get("/", (req, res) => {
-  
+app.post("/", (req, res) => {
+
   res.send("html");
 });
 

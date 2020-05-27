@@ -7,6 +7,9 @@ import User from "../models/User";
 import crypto from "crypto-random-string";
 import mailer from "../services/mailer";
 import secret from "../config/secret";
+
+
+
 auth.post("/register", async (req, res) => {
   // return res.send(secret.mail.username);
   const {
@@ -24,7 +27,7 @@ auth.post("/register", async (req, res) => {
     latitude,
     longitude,
   } = req.body;
-  if (!acc_type) return res.send("acc_type not specified");
+  if (!acc_type) return res.status(400).send("acc_type not specified");
   const { error } = httpSchemaValidation(req.body, acc_type);
 
   if (error) return res.status(400).send(error.details[0].message);
@@ -34,39 +37,39 @@ auth.post("/register", async (req, res) => {
 
   acc_type === "client"
     ? (userData = {
-        lastName,
-        firstName,
-        password,
-        email,
-        address,
-        c_address,
-        city,
-        zipcode,
-        phone,
-        acc_type,
-        created_at: today,
-        annonces: [],
-        acc_active: false,
-        confirm_code,
-        birth_date,
-        latitude,
-        longitude,
-      })
+      lastName,
+      firstName,
+      password,
+      email,
+      address,
+      c_address,
+      city,
+      zipcode,
+      phone,
+      acc_type,
+      created_at: today,
+      annonces: [],
+      acc_active: false,
+      confirm_code,
+      birth_date,
+      latitude,
+      longitude,
+    })
     : (userData = {
-        lastName,
-        firstName,
-        password,
-        email,
-        phone,
-        acc_type,
-        created_at: today,
-        annonces: [],
-        acc_active: false,
-        confirm_code,
-        birth_date,
-        latitude,
-        longitude,
-      });
+      lastName,
+      firstName,
+      password,
+      email,
+      phone,
+      acc_type,
+      created_at: today,
+      annonces: [],
+      acc_active: false,
+      confirm_code,
+      birth_date,
+      latitude,
+      longitude,
+    });
 
   // Verification si l'utilisateur existe deja ?
   try {
@@ -96,12 +99,14 @@ auth.post("/register", async (req, res) => {
 
 auth.post("/login", async (req, res) => {
   const { email, password } = req.body;
+  console.dir("bop1")
   const { error } = httpSchemaValidation(req.body, "login");
   if (error) return res.status(400).send(error.details[0].message);
   // Verification exist ?
   const userFound = await User.findOne({
     email,
   });
+  console.dir("bop2")
   if (!userFound)
     return res.status(401).json({ err: "User or password incorrect" });
   // Vérification du mot de passe
@@ -112,7 +117,7 @@ auth.post("/login", async (req, res) => {
     email: userFound.email,
     firstName: userFound.firstName,
     lastName: userFound.lastName,
-
+    acc_isActive: userFound.acc_active,
     email: userFound.email,
     phone: userFound.phone,
     acc_type: userFound.acc_type,
@@ -137,4 +142,59 @@ auth.post("/login", async (req, res) => {
   }
 });
 
+auth.post('/verifymail', async (req, res) => {
+
+  const {
+    secretCode
+  } = req.body
+  const {
+    error
+  } = httpValidation(req.body, 'verifymail');
+  if (error) return res.status(400).send(error.details[0].message);
+
+  const userFound = await User.findOne({
+    activationCode: secretCode
+  })
+
+
+  if (userFound.isActive) return res.status(409).json({
+    err: 'Compte déja activé',
+  })
+  if (!userFound.isActive && userFound.activationCode === secretCode) {
+    userFound.isActive = true
+    res.status(200).json({
+      msg: "Compte activé avec succés!"
+    })
+
+  } else if (!userFound || userFound.activationCode !== secretCode) return res.status(400).json({
+    err: 'Utilisateur ou Code de verification incorrect',
+
+  })
+
+});
+auth.post('/mailresent', async (req, res) => {
+  const {
+    email,
+  } = req.body
+  const {
+    error
+  } = httpValidation(req.body, 'mailresent');
+  if (error) return res.status(400).send(error.details[0].message)
+
+  const userFound = await User.findOne({
+    email
+  })
+  if (!userFound) return res.status(401).json({
+    "err": "Utilisateur / mot de passe incorrect",
+    "code": 401
+  })
+  sendMail(userFound.email, userFound.firstName, userFound.activationCode)
+    .then(() => res.status(200).json({
+      msg: 'Mail sent!',
+      code: 200
+    }))
+    .catch(err => res.status(502).json({
+      err
+    }))
+});
 export default auth;

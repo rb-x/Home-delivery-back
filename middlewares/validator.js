@@ -1,4 +1,5 @@
 import Joi from "@hapi/joi";
+import secret from "../config/secret";
 
 const httpSchemaValidation = (input, type) => {
   let schema;
@@ -54,8 +55,14 @@ const httpSchemaValidation = (input, type) => {
       handled_by: Joi.any(),
     });
   }
+  else if (type === "verifymail") {
+    secretCode: Joi.string().min(10).max(10).required()
+  }
+  else if (type === "mailresent") {
+    email: Joi.string().required()
+  }
+
   const validation = schema.validate(input);
-  console.log(validation, input);
   return validation;
 };
 
