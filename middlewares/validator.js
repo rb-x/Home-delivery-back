@@ -56,10 +56,10 @@ const httpSchemaValidation = (input, type) => {
     });
   }
   else if (type === "verifymail") {
-    secretCode: Joi.string().min(10).max(10).required()
+    schema = Joi.object({ secretCode: Joi.string().min(10).max(10).required() })
   }
   else if (type === "mailresent") {
-    email: Joi.string().required()
+    schema = Joi.object({ email: Joi.string().required() })
   }
 
   const validation = schema.validate(input);

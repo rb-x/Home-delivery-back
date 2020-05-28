@@ -123,11 +123,11 @@ auth.post("/login", async (req, res) => {
     acc_type: userFound.acc_type,
   };
   let token = jwt.sign(payload, process.env.SECRET_KEY, {
-    expiresIn: 86400, // 2 hours
+    expiresIn: 86400, // 24 hours
   });
   if (passwordMatch) {
     if (!userFound.acc_active)
-      return res.json({ msg: "Account not active", isactive: false });
+      return res.json({ msg: "Account not active", isactive: false, token });
     return res.status(200).json({
       token,
       user: {
@@ -149,27 +149,33 @@ auth.post('/verifymail', async (req, res) => {
   } = req.body
   const {
     error
-  } = httpValidation(req.body, 'verifymail');
+  } = httpSchemaValidation(req.body, 'verifymail');
   if (error) return res.status(400).send(error.details[0].message);
 
   const userFound = await User.findOne({
-    activationCode: secretCode
+    confirm_code: secretCode
   })
+  console.log(userFound)
 
-
-  if (userFound.isActive) return res.status(409).json({
-    err: 'Compte déja activé',
-  })
-  if (!userFound.isActive && userFound.activationCode === secretCode) {
-    userFound.isActive = true
-    res.status(200).json({
-      msg: "Compte activé avec succés!"
-    })
-
-  } else if (!userFound || userFound.activationCode !== secretCode) return res.status(400).json({
+  if (!userFound || userFound.confirm_code !== secretCode) return res.status(400).json({
     err: 'Utilisateur ou Code de verification incorrect',
 
   })
+  else if (userFound.acc_active) return res.status(409).json({
+    err: 'Compte déja activé',
+  })
+  else if (!userFound.acc_active && userFound.confirm_code === secretCode) {
+    try {
+      userFound.acc_active = true
+      await userFound.save()
+      res.status(200).json({
+        msg: "Compte activé avec succès!"
+      })
+    } catch (err) {
+      return res.status(500).json({ err })
+    }
+
+  }
 
 });
 auth.post('/mailresent', async (req, res) => {
@@ -178,22 +184,29 @@ auth.post('/mailresent', async (req, res) => {
   } = req.body
   const {
     error
-  } = httpValidation(req.body, 'mailresent');
+  } = httpSchemaValidation(req.body, 'mailresent');
   if (error) return res.status(400).send(error.details[0].message)
 
   const userFound = await User.findOne({
     email
   })
-  if (!userFound) return res.status(401).json({
-    "err": "Utilisateur / mot de passe incorrect",
+  if (userFound.acc_active) {
+    return res.status(409).json({
+      "err": "Utilisateur déja confirmé",
+      "code": 409
+    })
+  }
+  else if (!userFound) return res.status(401).json({
+    "err": "Utilisateur / code de confirmation incorrect",
     "code": 401
   })
-  sendMail(userFound.email, userFound.firstName, userFound.activationCode)
+
+  mailer(userFound.email, null, userFound.confirm_code)
     .then(() => res.status(200).json({
-      msg: 'Mail sent!',
+      msg: 'Mail Envoyé!',
       code: 200
     }))
-    .catch(err => res.status(502).json({
+    .catch(err => res.status(500).json({
       err
     }))
 });
