@@ -58,6 +58,7 @@ const UserScheme = new schema({
   acc_active: {
     type: Boolean,
     required: true,
+    default: false
   },
   confirm_code: {
     type: String,

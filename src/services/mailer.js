@@ -1,9 +1,9 @@
 import nodemailer from "nodemailer";
-import secret from "../config/secret";
+import secret from "../../config/secret";
 
-const templateMail = require("../templates/confirmation_mail");
+import templateMail from "../templates/confirmation_mail"
 
-module.exports = async function (mail, name, code) {
+async function sendMail(mail, name, code) {
   // Generate test SMTP service account from ethereal.email
   // Only needed if you don't have a real mail account for testing
   // let testAccount = await nodemailer.createTestAccount();
@@ -39,3 +39,6 @@ module.exports = async function (mail, name, code) {
   console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
   // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
 };
+
+
+module.exports = sendMail

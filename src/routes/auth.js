@@ -6,7 +6,7 @@ import httpSchemaValidation from "../middlewares/validator";
 import User from "../models/User";
 import crypto from "crypto-random-string";
 import mailer from "../services/mailer";
-import secret from "../config/secret";
+
 
 
 
@@ -210,4 +210,6 @@ auth.post('/mailresent', async (req, res) => {
       err
     }))
 });
+
+
 export default auth;
