@@ -1,10 +1,18 @@
 import express from "express";
-const router = express.Router();
 import authroute from "../middlewares/auth";
 import validator from "../middlewares/validator";
 import User from "../models/User";
 import Annonce from "../models/Annonce";
-//Association document to USer
+const router = express.Router();
+
+router.get("/fetch", authroute, async (req, res) => {
+  try {
+    const annonces = await Annonce.find({ created_by: req.user.id });
+    return res.status(200).send({ annonces, length: annonces.length });
+  } catch (error) {
+    return res.status(500).send({ error });
+  }
+});
 
 /**
  * @protected Route
@@ -13,13 +21,13 @@ router.post("/create", authroute, async (req, res) => {
   //we should create an annonce based on the JWT we receive
   //we intercept the token
   // we create a Annonces , we catch the annonce ID we set it to user
-  const { data } = req.body
-  console.log(data)
+  const { data } = req.body;
+  console.log(data);
   const { error } = validator(data, "annonce");
   if (error) return res.status(401).send(error.details[0].message);
-  const annonce_data = data
+  const annonce_data = data;
   annonce_data.created_by = req.user.id;
-  annonce_data.status = "active"
+  annonce_data.status = "active";
   // res.json({ user: req.user, course: annonce_data });
   let user = await User.findById(req.user.id);
   if (req.user.acc_type !== "client")
@@ -49,7 +57,8 @@ router.put("/handle", authroute, async (req, res) => {
   //req.user.id
   // recuperation id annoce et id livreur <localsto>
   const annonce_is_found = await Annonce.findById(annonce_id);
-  if (!annonce_is_found || annonce_is_found.status !== "active") return res.json({ err: "annonce_id not found" });
+  if (!annonce_is_found || annonce_is_found.status !== "active")
+    return res.json({ err: "annonce_id not found" });
 
   const annonce = await Annonce.findById(annonce_id);
   annonce.handled_by = req.user.id;
