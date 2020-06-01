@@ -1,6 +1,8 @@
-[![N|Solid](https://i.imgur.com/GQDrHLL.png)]()
+[![N|Solid](https://i.imgur.com/ST14JGn.png)]()
 
-# HomeDelivery BACK-END
+[![Build Status](http://3.90.31.250:8080/buildStatus/icon?job=React-CI)](https://github.com/LasCC/HomeDelivery)
+
+# HomeDelivery [BACK-END]
 
 HomeDelivery est une application web afin d'aider les personnes âgées ou en situation de handicap/maladie de déposer une demande avec sa liste de courses.
 
@@ -29,14 +31,48 @@ HomeDelivery utilises les technologies suivantes :
 
 - MongoDB
 
-- Ubuntu 18 LTS (Serveur AWS)
+- CentOS (Serveur AWS)
 
 - SQLite
 
 ## Front-end :
 
-- React
+- ReactJS
 
 - Framework CSS (Material-ui)
 
 - Figma/Adobe XD pour le prototype d'application
+
+- Mapbox JS
+
+- (Mobile) React Native
+
+- Chart-JS
+
+## DevOps :
+
+- Jenkins
+
+- Github
+
+- Docker
+
+### Installation
+
+```
+yarn install && yarn start
+```
+
+### Quelques images du site
+
+[![N|Solid](https://i.imgur.com/fdMbcXo.png)](https://i.imgur.com/fdMbcXo.png)
+[![N|Solid](https://i.imgur.com/aJyxJr1.png)](https://i.imgur.com/aJyxJr1.png)
+[![N|Solid](https://i.imgur.com/MR4ycBV.png)](https://i.imgur.com/MR4ycBV.png)
+[![N|Solid](https://i.imgur.com/6Y1o9fV.png)](https://i.imgur.com/6Y1o9fV.png)
+[![N|Solid](https://i.imgur.com/UFFNOVi.jpg)](https://i.imgur.com/UFFNOVi.jpg)
+[![N|Solid](https://i.imgur.com/Zss419J.png)](https://i.imgur.com/Zss419J.png)
+[![N|Solid](https://i.imgur.com/gmTG5V0.png)](https://i.imgur.com/gmTG5V0.png)
+
+ 
+
+@Rb-x - Projet de groupe avec Ludovic COULON, Sebastien WIENNE, Réda MAIZATE
