@@ -121,6 +121,11 @@ auth.post("/login", async (req, res) => {
     email: userFound.email,
     phone: userFound.phone,
     acc_type: userFound.acc_type,
+    city: userFound.city,
+    address: userFound.address,
+    latitude: userFound.latitude,
+    longitude: userFound.longitude,
+    zipcode: userFound.zipcode
   };
   let token = jwt.sign(payload, process.env.SECRET_KEY, {
     expiresIn: 86400, // 24 hours

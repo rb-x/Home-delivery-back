@@ -50,8 +50,6 @@ const httpSchemaValidation = (input, type) => {
       info_annexes: Joi.string().required(),
       payment_method: Joi.string().required(),
       max_price: Joi.string().required(),
-      status: Joi.string().required(),
-      created_by: Joi.any().required(),
       handled_by: Joi.any(),
     });
   }

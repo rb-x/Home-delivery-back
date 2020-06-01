@@ -1,7 +1,7 @@
 import request from "supertest";
 import "regenerator-runtime/runtime"
 import app from "../src/app";
-import { async } from "regenerator-runtime/runtime";
+
 import User from '../src/models/User'
 
 
@@ -84,4 +84,34 @@ test('It should deny the authentication if the password is incorrect', async () 
     }).expect(401)
 })
 
+// test('It should validate the account registration ', async () => {
+//     const client_user = {
+//         email: "bobx@something",
+//         password: "bob12345",
+//         firstName: "Mike",
+//         lastName: "Tyson",
+//         address: "11 rue de la republique",
+//         c_address: "1er etage",
+//         city: "Paris",
+//         zipcode: "75013",
+//         phone: "0789854123",
+//         acc_type: "client",
+//         birth_date: "Paris",
+//         longitude: "123",
+//         latitude: "32",
+//     },
+//     await request(app).post("/auth/register").send(client_user).expect(201)
+//     await request(app).post("/auth/login").send({
+//         email: client_user.email,
+//         password: client_user.password,
+//     }).expect(res.status).toBe(200)
+//     let user_indb = await User.findOne({ email: client_user.email })
 
+//     await request(app).post("/auth/veryfymail").send(
+//         {
+//             secretCode: user_indb.confirm_code
+//         }
+//     ).toBe(res.status === 200)
+//     user_indb = await User.findOne({ email: client_user.email })
+
+// })

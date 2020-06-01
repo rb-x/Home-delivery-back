@@ -34,6 +34,7 @@ const AnnonceScheme = new schema({
       "received_to_home",
       "completed",
     ],
+    default: "active"
   },
   created_by: {
     type: mongoose.Types.ObjectId,
@@ -46,7 +47,7 @@ const AnnonceScheme = new schema({
   payment_method: {
     required: true,
     type: String,
-    enum: ["cb", "cash"],
+    enum: ["Carte de crédit", "Espèce"],
   },
 });
 
