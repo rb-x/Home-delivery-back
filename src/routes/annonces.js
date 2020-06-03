@@ -6,6 +6,7 @@ import Annonce from "../models/Annonce";
 const router = express.Router();
 
 router.get("/fetch", authroute, async (req, res) => {
+  //fetch personal annonce
   try {
     const annonces = await Annonce.find({ created_by: req.user.id });
     return res.status(200).send({ annonces, length: annonces.length });
@@ -13,6 +14,17 @@ router.get("/fetch", authroute, async (req, res) => {
     return res.status(500).send({ error });
   }
 });
+
+router.get("/fetchAll", authroute, async (req, res) => {
+  try {
+    const annonces = await Annonce.find({ status: "active" });
+    return res.status(200).send({ annonces, length: annonces.length });
+  } catch (error) {
+    return res.status(500).send({ error });
+  }
+});
+
+
 
 /**
  * @protected Route
