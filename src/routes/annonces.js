@@ -178,7 +178,7 @@ router.post("/resolve", authroute, async (req, res) => {
     let user_found = await User.findById(annonce_found.created_by)
     return res.send({ user_found, annonce_found })
   } catch (err) {
-    return res.send({ err })
+    return res.status(404).send({ err: "id Not found" })
   }
 
 
