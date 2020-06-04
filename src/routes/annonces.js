@@ -174,7 +174,7 @@ router.post("/resolve", authroute, async (req, res) => {
   if (req.user.acc_type !== "helper") return res.status(401).send({ err: "Not authorized to perform this action" })
   try {
     let annonce_found = await Annonce.findById(annonce_id)
-    if (!annonce_found) return res.send({ err: "Annonce not found" })
+    if (!annonce_found) return res.status(404).send({ err: "Annonce not found" })
     let user_found = await User.findById(annonce_found.created_by)
     return res.send({ user_found, annonce_found })
   } catch (err) {
