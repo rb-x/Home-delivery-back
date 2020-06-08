@@ -46,7 +46,7 @@ const AnnonceScheme = new schema({
   },
   dept: {
     type: String,
-    required: true
+    required: false
   },
   payment_method: {
     required: true,

@@ -26,6 +26,7 @@ auth.post("/register", async (req, res) => {
     acc_type,
     latitude,
     longitude,
+    dept
   } = req.body;
   if (!acc_type) return res.status(400).send("acc_type not specified");
   const { error } = httpSchemaValidation(req.body, acc_type);
@@ -47,13 +48,14 @@ auth.post("/register", async (req, res) => {
       zipcode,
       phone,
       acc_type,
-      created_at: today,
-      annonces: [],
-      acc_active: false,
       confirm_code,
       birth_date,
       latitude,
       longitude,
+      dept,
+      annonces: [],
+      acc_active: false,
+      created_at: today,
     })
     : (userData = {
       lastName,
@@ -62,13 +64,13 @@ auth.post("/register", async (req, res) => {
       email,
       phone,
       acc_type,
-      created_at: today,
-      annonces: [],
-      acc_active: false,
       confirm_code,
       birth_date,
       latitude,
       longitude,
+      annonces: [],
+      acc_active: false,
+      created_at: today,
     });
 
   // Verification si l'utilisateur existe deja ?
