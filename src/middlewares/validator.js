@@ -33,6 +33,7 @@ const httpSchemaValidation = (input, type) => {
       acc_type: Joi.any().required(),
       latitude: Joi.string(),
       longitude: Joi.string(),
+      dept: Joi.string().required()
     });
   } else if (type === "login") {
     schema = Joi.object({

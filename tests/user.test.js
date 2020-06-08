@@ -27,6 +27,7 @@ test('It should register an account', async () => {
         birth_date: "Paris",
         longitude: "123",
         latitude: "32",
+        dept: "xxxx"
     }).expect(201)
 })
 test('It should try to login the user resgistred without account confirmed', async (done) => {
@@ -44,6 +45,7 @@ test('It should try to login the user resgistred without account confirmed', asy
         birth_date: "Paris",
         longitude: "123",
         latitude: "32",
+        dept: "xxxx"
     }
     const isValidJSON = (res) => {
         res.body.should.have.property("msg", "Account not active");
