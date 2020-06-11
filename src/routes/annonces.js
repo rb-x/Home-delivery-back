@@ -174,7 +174,7 @@ router.post("/resolve", authroute, async (req, res) => {
   // TODO SANITIZE ! 
   // return the annonce with its creator 
   const { annonce_id } = req.body
-  if (!annonce_id || annonce_id.length >= 20 || typeof (dept_name) !== 'string') return res.send({ err: "annonce_id is required" })
+  if (!annonce_id || annonce_id.length >= 25) return res.send({ err: "annonce_id is required" })
   if (req.user.acc_type !== "helper") return res.status(401).send({ err: "Not authorized to perform this action" })
   try {
     let annonce_found = await Annonce.findById(annonce_id)
