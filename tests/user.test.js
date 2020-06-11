@@ -78,6 +78,7 @@ test('It should deny the authentication if the password is incorrect', async () 
         birth_date: "Paris",
         longitude: "123",
         latitude: "32",
+        dept: "xxx"
     }
     await request(app).post("/auth/register").send(client_user).expect(201)
     await request(app).post("/auth/login").send({

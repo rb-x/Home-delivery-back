@@ -16,6 +16,7 @@ router.get("/fetch", authroute, async (req, res) => {
 });
 
 router.get("/fetchAll", authroute, async (req, res) => {
+  //fetch all active annonce 
   try {
     const annonces = await Annonce.find({ status: "active" });
     return res.status(200).send({ annonces, length: annonces.length });
@@ -40,6 +41,7 @@ router.post("/create", authroute, async (req, res) => {
   const annonce_data = data;
   annonce_data.created_by = req.user.id;
   annonce_data.status = "active";
+  annonce_data.dept = req.user.dept;
   // res.json({ user: req.user, course: annonce_data });
   let user = await User.findById(req.user.id);
   if (req.user.acc_type !== "client")
@@ -169,8 +171,10 @@ router.delete("/delete", authroute, async (req, res) => {
 
 
 router.post("/resolve", authroute, async (req, res) => {
+  // TODO SANITIZE ! 
+  // return the annonce with its creator 
   const { annonce_id } = req.body
-  if (!annonce_id) return res.send({ err: "annonce_id is required" })
+  if (!annonce_id || annonce_id.length >= 20 || typeof (dept_name) !== 'string') return res.send({ err: "annonce_id is required" })
   if (req.user.acc_type !== "helper") return res.status(401).send({ err: "Not authorized to perform this action" })
   try {
     let annonce_found = await Annonce.findById(annonce_id)
@@ -180,8 +184,20 @@ router.post("/resolve", authroute, async (req, res) => {
   } catch (err) {
     return res.status(404).send({ err: "id Not found" })
   }
-
-
-
 })
+
+router.post("/fetchdeptactive", async (req, res) => {
+  // TODO SANITIZE WITH JOI
+  // fetch active annonce by dept 
+  const { dept_name } = req.body
+  if (!dept_name || dept_name.length >= 20 || typeof (dept_name) !== 'string') return res.send({ err: "dept_name is required" })
+
+  try {
+    const annonces = await Annonce.find({ status: "active", dept: dept_name });
+    return res.status(200).send({ annonces, length: annonces.length });
+  } catch (error) {
+    return res.status(500).send({ error });
+  }
+})
+
 export default router;

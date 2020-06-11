@@ -64,6 +64,10 @@ const UserScheme = new schema({
     type: String,
     required: true,
   },
+  dept: {
+    type: String,
+    required: false
+  },
   latitude: {
     type: String,
     required: false,
