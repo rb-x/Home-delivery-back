@@ -118,7 +118,7 @@ router.put("/update", authroute, async (req, res) => {
       break;
 
     default:
-      return res.status(400).json({ error: "Incorrect step received" });
+      return console.log({ error: "Incorrect step received" });
       break;
   }
   console.log(step);
