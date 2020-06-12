@@ -94,6 +94,7 @@ router.put("/update", authroute, async (req, res) => {
   let annonce_is_found = await Annonce.findById(annonce_id);
   if (!annonce_is_found) return res.json({ err: "annonce_id not found" });
 
+
   switch (step) {
     case "1":
       step = "active";
@@ -118,7 +119,7 @@ router.put("/update", authroute, async (req, res) => {
       break;
 
     default:
-      return console.log({ error: "Incorrect step received" });
+      return res.status(400).json({ error: "Incorrect step received" });
       break;
   }
   console.log(step);
