@@ -6,13 +6,20 @@ import Annonce from "../models/Annonce";
 const router = express.Router();
 
 router.get("/fetch", authroute, async (req, res) => {
-  //fetch personal annonce
+  //fetch personal annonce handled / created
+
+
   try {
-    const annonces = await Annonce.find({ created_by: req.user.id });
+    let annonces = null
+    if (req.user.acc_type === "client")
+      annonces = await Annonce.find({ created_by: req.user.id });
+    else
+      annonces = await Annonce.find({ handled_by: req.user.id }); // for helper 
     return res.status(200).send({ annonces, length: annonces.length });
   } catch (error) {
     return res.status(500).send({ error });
   }
+
 });
 
 router.get("/fetchAll", authroute, async (req, res) => {
